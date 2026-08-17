@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adicionar filme - CineTrack</title>
+</head>
+<body>
+    <nav>
+        <a href="./index.html">← Voltar</a>
+    </nav>
+    <h1>Adicionar filme</h1>
+
+    <form id="form-filme">
+        <p><label for="title">Título</label><br><input id="title" type="text" required></p>
+        <p><label for="year">Ano</label><br><input id="year" type="number" min="1888" max="2030" required></p>
+        <p><label for="gender">Gênero</label><br><input id="gender" type="text" required></p>
+        <p><label for="url">URL do pôster</label><br><input id="url" type="text"></p>
+        <p><label for="status">Status</label><br>
+            <select id="status" name="Status" required>
+                <option value="para_assistir">Para assistir</option>
+                <option value="assitido">Assistido</option>
+                <option value="assitindo">Assistindo</option>
+            </select>
+        </p>
+        <p><label>Nota (1-5)</label><br><input type="number" min="1" max="5" required></p>
+        <p><label>Comentário</label><br><textarea name="Comentário"></textarea></p>
+        <button type="button">Cancelar</button><button type="submit">Salvar</button>
+    </form>
+</body>
+</html>
