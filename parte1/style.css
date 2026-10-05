@@ -1,0 +1,50 @@
+/* Paleta: primária #1A3A5C; acento #C0392B; neutro #F5F5F5. */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    font-size: 16px;
+}
+
+body {
+    font-family: system-ui, sans-serif;
+    color: #1f2937;
+    background: #f5f5f5;
+    line-height: 1.5;
+}
+
+img {
+    max-width: 100%;
+    display: block;
+}
+
+button {
+    font: inherit;
+    cursor: pointer;
+}
+
+header {
+    background: #1a3a5c;
+    color: #fff;
+    padding: 16px 24px;
+}
+
+header button {
+    background: #c0392b;
+    color: #fff;
+    border: 0;
+    border-radius: 8px;
+    padding: 8px 16px;
+}
+
+.card {
+    background: #fff;
+    padding: 16px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 1px 4px #0002;
+}
