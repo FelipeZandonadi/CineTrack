@@ -25,12 +25,35 @@ img {
 button {
     font: inherit;
     cursor: pointer;
+    background: #fff;
+    color: #1a3a5c;
+    border: 1px solid #1a3a5c;
+    border-radius: 8px;
+    padding: 6px 12px;
 }
 
 header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
     background: #1a3a5c;
     color: #fff;
     padding: 16px 24px;
+}
+
+header h1 {
+    flex: 0 0 auto;
+}
+
+header input {
+    flex: 1 1 240px;
+    min-width: 0;
+    font: inherit;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
 }
 
 header button {
@@ -41,10 +64,58 @@ header button {
     padding: 8px 16px;
 }
 
+nav {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    padding: 12px 24px;
+}
+
+nav button {
+    padding: 6px 14px;
+    border-radius: 999px;
+}
+
+nav button.ativo {
+    background: #1a3a5c;
+    color: #fff;
+}
+
+#lista {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding: 16px 24px;
+}
+
 .card {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    width: 200px;
     background: #fff;
     padding: 16px;
     border: 1px solid #ddd;
     border-radius: 8px;
     box-shadow: 0 1px 4px #0002;
+}
+
+.card h2 {
+    font-size: 1.125rem;
+}
+
+.card .acoes {
+    margin-top: auto;
+    display: flex;
+    gap: 8px;
+}
+
+.card .acoes button {
+    flex: 1;
+    padding: 6px;
+    font-size: 0.875rem;
+}
+
+footer {
+    padding: 16px 24px;
 }
