@@ -45,6 +45,7 @@ header {
 
 header h1 {
     flex: 0 0 auto;
+    font-size: clamp(1.25rem, 1rem + 1vw, 1.75rem);
 }
 
 header input {
@@ -62,6 +63,10 @@ header button {
     border: 0;
     border-radius: 8px;
     padding: 8px 16px;
+}
+
+.texto-adicionar {
+    display: none;
 }
 
 nav {
@@ -82,22 +87,28 @@ nav button.ativo {
 }
 
 #lista {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 16px;
-    padding: 16px 24px;
+    padding: 24px;
 }
 
 .card {
     display: flex;
     flex-direction: column;
     gap: 6px;
-    width: 200px;
     background: #fff;
     padding: 16px;
     border: 1px solid #ddd;
     border-radius: 8px;
     box-shadow: 0 1px 4px #0002;
+}
+
+.card img {
+    width: 100%;
+    aspect-ratio: 2 / 3;
+    object-fit: cover;
+    border-radius: 6px;
 }
 
 .card h2 {
@@ -118,4 +129,19 @@ nav button.ativo {
 
 footer {
     padding: 16px 24px;
+}
+
+@media (min-width: 1024px) {
+    header,
+    #lista {
+        gap: 24px;
+    }
+
+    header h1 {
+        font-size: clamp(1.75rem, 1rem + 1.5vw, 2.5rem);
+    }
+
+    .texto-adicionar {
+        display: inline;
+    }
 }
