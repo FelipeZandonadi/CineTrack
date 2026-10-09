@@ -20,7 +20,7 @@
         <button class="ativo" type="button">Todos</button>
         <button class="desativo" type="button">Assistido</button>
         <button class="desativo" type="button">Assistindo</button>
-        <button class="desativo" type="button">Quero Assitir</button>
+        <button class="desativo" type="button">Quero Assistir</button>
     </nav>
     <main>
         <section id="lista" aria-live="polite">
@@ -31,7 +31,7 @@
                 <h2>A Origem</h2>
                 <p>2010 - Ficção científica</p>
                 <p>Nota: &#9734&#9734&#9734&#9734&#9734</p>
-                <span>Assistido</span>
+                <span class="badge assistido">Assistido</span>
                 <div class="acoes">
                     <button class="editar" type="button">Editar</button>
                     <button class="remover" type="button">Remover</button>
@@ -44,7 +44,7 @@
                 <h2>Parasita</h2>
                 <p>2019 - Suspense</p>
                 <p>Nota: &#9734&#9734&#9734&#9734&#9734</p>
-                <span>Assistido</span>
+                <span class="badge assistido">Assistido</span>
                 <div class="acoes">
                     <button class="editar" type="button">Editar</button>
                     <button class="remover" type="button">Remover</button>
@@ -57,7 +57,7 @@
                 <h2>O Alto da compadecida</h2>
                 <p>2000 - Comédia</p>
                 <p>Nota: &#9734&#9734&#9734&#9734&#9734</p>
-                <span>Assistido</span>
+                <span class="badge assistido">Assistido</span>
                 <div class="acoes">
                     <button class="editar" type="button">Editar</button>
                     <button class="remover" type="button">Remover</button>
@@ -70,7 +70,7 @@
                 <h2>Duna: Parte Dois</h2>
                 <p>2024 - Ficção científica</p>
                 <p>Nota: &#9734&#9734&#9734&#9734&#9734</p>
-                <span>Assistindo</span>
+                <span class="badge assistindo">Assistindo</span>
                 <div class="acoes">
                     <button class="editar" type="button">Editar</button>
                     <button class="remover" type="button">Remover</button>
@@ -83,7 +83,7 @@
                 <h2>Interestelar</h2>
                 <p>2014 - Ficção científica</p>
                 <p>Nota: &#9734&#9734&#9734&#9734&#9734</p>
-                <span>Quero Assistir</span>
+                <span class="badge quero">Quero Assistir</span>
                 <div class="acoes">
                     <button class="editar" type="button">Editar</button>
                     <button class="remover" type="button">Remover</button>
@@ -96,7 +96,7 @@
                 <h2>Cidade de Deus</h2>
                 <p>2002 - Drama</p>
                 <p>Nota: &#9734&#9734&#9734&#9734&#9734</p>
-                <span>Quero Assitir</span>
+                <span class="badge quero">Quero Assistir</span>
                 <div class="acoes">
                     <button class="editar" type="button">Editar</button>
                     <button class="remover" type="button">Remover</button>
@@ -104,6 +104,31 @@
             </article>
         </section>
     </main>
+    <div id="modal" hidden>
+        <div class="modal-conteudo" role="dialog" aria-modal="true" aria-labelledby="modal-titulo">
+            <h2 id="modal-titulo">Adicionar filme</h2>
+            <form id="form-filme">
+                <p><label for="title">Título</label><input id="title" name="titulo" type="text" required></p>
+                <p><label for="year">Ano</label><input id="year" name="ano" type="number" min="1888" max="2030" required></p>
+                <p><label for="gender">Gênero</label><input id="gender" name="genero" type="text" required></p>
+                <p><label for="url">URL do pôster</label><input id="url" name="poster" type="text"></p>
+                <p>
+                    <label for="status">Status</label>
+                    <select id="status" name="status" required>
+                        <option value="quero">Quero Assistir</option>
+                        <option value="assistido">Assistido</option>
+                        <option value="assistindo">Assistindo</option>
+                    </select>
+                </p>
+                <p><label for="nota">Nota (1-5)</label><input id="nota" name="nota" type="number" min="1" max="5" required></p>
+                <p><label for="comentario">Comentário</label><textarea id="comentario" name="comentario"></textarea></p>
+                <div class="acoes">
+                    <button type="button">Cancelar</button>
+                    <button class="primario" type="submit">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
     <footer>
         <small>CineTrack - UEM</small>
         <p><a href="adicionar.html">Adicionar filme</a></p>

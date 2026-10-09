@@ -10,23 +10,28 @@
     <nav>
         <a href="./index.html">&lt;- Voltar</a>
     </nav>
-    <h1>Adicionar filme</h1>
-
-    <form id="form-filme">
-        <p><label for="title">Título</label><br><input id="title" type="text" required></p>
-        <p><label for="year">Ano</label><br><input id="year" type="number" min="1888" max="2030" required></p>
-        <p><label for="gender">Gênero</label><br><input id="gender" type="text" required></p>
-        <p><label for="url">URL do pôster</label><br><input id="url" type="text"></p>
-        <p><label for="status">Status</label><br>
-        <select id="status" name="Status" required>
-            <option value="para_assistir">Quero Assitir</option>
-            <option value="assitido">Assistido</option>
-            <option value="assitindo">Assistindo</option>
-        </select>
-        </p>
-        <p><label>Nota (1-5)</label><br><input type="number" min="1" max="5" required></p>
-        <p><label>Comentário</label><br><textarea name="Comentário"></textarea></p>
-        <button type="button">Cancelar</button><button type="submit">Salvar</button>
-    </form>
+    <main class="pagina-formulario">
+        <h1>Adicionar filme</h1>
+        <form id="form-filme">
+            <p><label for="title">Título</label><input id="title" name="titulo" type="text" required></p>
+            <p><label for="year">Ano</label><input id="year" name="ano" type="number" min="1888" max="2030" required></p>
+            <p><label for="gender">Gênero</label><input id="gender" name="genero" type="text" required></p>
+            <p><label for="url">URL do pôster</label><input id="url" name="poster" type="text"></p>
+            <p>
+                <label for="status">Status</label>
+                <select id="status" name="status" required>
+                    <option value="quero">Quero Assistir</option>
+                    <option value="assistido">Assistido</option>
+                    <option value="assistindo">Assistindo</option>
+                </select>
+            </p>
+            <p><label for="nota">Nota (1-5)</label><input id="nota" name="nota" type="number" min="1" max="5" required></p>
+            <p><label for="comentario">Comentário</label><textarea id="comentario" name="comentario"></textarea></p>
+            <div class="acoes">
+                <button type="button">Cancelar</button>
+                <button class="primario" type="submit">Salvar</button>
+            </div>
+        </form>
+    </main>
 </body>
 </html>
