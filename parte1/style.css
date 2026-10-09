@@ -1,22 +1,27 @@
-/* Paleta: primária #1A3A5C; acento #C0392B; neutro #F5F5F5. */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
+
+/* Paleta: amarelo #FACC15; preto #121212; detalhes roxos #6D28D9. */
 
 :root {
     color-scheme: light;
-    --cor-primaria: #1a3a5c;
-    --cor-acento: #c0392b;
-    --cor-fundo: #f5f5f5;
-    --cor-texto: #1f2937;
+    --cor-primaria: #facc15;
+    --cor-acento: #facc15;
+    --cor-acento-hover: #eab308;
+    --cor-cabecalho: #121212;
+    --cor-fundo: #faf9f6;
+    --cor-texto: #18181b;
     --cor-superficie: #fff;
-    --cor-contraste: #fff;
-    --cor-borda: #b6bec8;
-    --cor-link: #1a3a5c;
-    --cor-foco: #2563eb;
+    --cor-contraste: #121212;
+    --cor-borda: #d4d4d8;
+    --cor-link: #6d28d9;
+    --cor-link-hover: #4c1d95;
+    --cor-foco: #7c3aed;
     --cor-overlay: #0008;
     --cor-sombra: #0002;
     --fundo-assistido: #dcfce7;
     --texto-assistido: #166534;
-    --fundo-assistindo: #dbeafe;
-    --texto-assistindo: #1e40af;
+    --fundo-assistindo: #ede9fe;
+    --texto-assistindo: #5b21b6;
     --fundo-quero: #fef3c7;
     --texto-quero: #854d0e;
     --raio: 8px;
@@ -36,10 +41,16 @@ html {
 }
 
 body {
-    font-family: system-ui, sans-serif;
+    font-family: 'Inter', system-ui, sans-serif;
     color: var(--cor-texto);
     background: var(--cor-fundo);
     line-height: 1.5;
+}
+
+h1,
+h2 {
+    font-family: 'Space Grotesk', system-ui, sans-serif;
+    font-weight: 700;
 }
 
 img {
@@ -75,6 +86,22 @@ a:focus-visible {
 
 a {
     color: var(--cor-link);
+    font-weight: 600;
+    text-decoration-line: underline;
+    text-decoration-color: var(--cor-borda);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 4px;
+    transition: color 200ms ease, text-decoration-color 200ms ease;
+}
+
+a:hover {
+    color: var(--cor-link-hover);
+    text-decoration-color: currentColor;
+}
+
+header button:hover,
+.primario:hover {
+    background: var(--cor-acento-hover);
 }
 
 header {
@@ -83,8 +110,8 @@ header {
     justify-content: space-between;
     gap: var(--espaco);
     flex-wrap: wrap;
-    background: var(--cor-primaria);
-    color: var(--cor-contraste);
+    background: var(--cor-cabecalho);
+    color: var(--cor-acento);
     padding: var(--espaco) var(--espaco-grande);
 }
 
@@ -313,25 +340,27 @@ footer {
 @media (prefers-color-scheme: dark) {
     :root {
         color-scheme: dark;
-        --cor-primaria: #264d73;
-        --cor-fundo: #1a1a1a;
-        --cor-texto: #f3f3f3;
-        --cor-superficie: #262626;
-        --cor-borda: #737373;
-        --cor-link: #93c5fd;
-        --cor-foco: #93c5fd;
+        --cor-acento-hover: #fde047;
+        --cor-fundo: #121212;
+        --cor-texto: #f5f5f5;
+        --cor-superficie: #202020;
+        --cor-borda: #52525b;
+        --cor-link: #c4b5fd;
+        --cor-link-hover: #fde047;
+        --cor-foco: #c4b5fd;
         --cor-sombra: #0006;
         --fundo-assistido: #14532d;
         --texto-assistido: #bbf7d0;
-        --fundo-assistindo: #1e3a8a;
-        --texto-assistindo: #bfdbfe;
-        --fundo-quero: #713f12;
+        --fundo-assistindo: #3b2064;
+        --texto-assistindo: #ddd6fe;
+        --fundo-quero: #422f0b;
         --texto-quero: #fde68a;
     }
 }
 
 @media (prefers-reduced-motion: reduce) {
-    button {
+    button,
+    a {
         transition: none;
     }
 
