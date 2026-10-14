@@ -16,6 +16,7 @@
     --cor-link: #6d28d9;
     --cor-link-hover: #4c1d95;
     --cor-foco: #7c3aed;
+    --cor-erro: #b91c1c;
     --cor-overlay: #0008;
     --cor-sombra: #0002;
     --fundo-assistido: #dcfce7;
@@ -248,6 +249,12 @@ footer {
     gap: var(--espaco);
 }
 
+.mensagem-erro {
+    color: var(--cor-erro);
+    white-space: pre-line;
+    margin-bottom: var(--espaco);
+}
+
 #form-filme p {
     display: flex;
     flex-direction: column;
@@ -348,6 +355,7 @@ footer {
         --cor-link: #c4b5fd;
         --cor-link-hover: #fde047;
         --cor-foco: #c4b5fd;
+        --cor-erro: #fca5a5;
         --cor-sombra: #0006;
         --fundo-assistido: #14532d;
         --texto-assistido: #bbf7d0;

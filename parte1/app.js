@@ -78,32 +78,172 @@ const filmesIniciais = [
 
 const lista = document.querySelector("#lista");
 const nav = document.querySelector('nav[aria-label="Filtros de status"]');
+const modal = document.querySelector("#modal");
+const form = document.querySelector("#form-filme");
+const errosFormulario = document.querySelector("#erros-formulario");
+const fundo = [...document.body.children].filter((elemento) => elemento !== modal && elemento.tagName !== "SCRIPT");
+const POSTER_PADRAO = "data:image/svg+xml," + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 300"><rect width="200" height="300" fill="#202020"/><text x="100" y="150" text-anchor="middle" fill="#f5f5f5" font-family="sans-serif" font-size="16">Sem pôster</text></svg>');
 let filmes = [...filmesIniciais];
+let editandoId = null;
+let focoAnterior = null;
+let rolagemAnterior = "";
 
-function renderizarCards(filmes) {
-    lista.innerHTML = filmes.map((filme) => `
-        <article class="card" data-id="${filme.id}">
-            <img src="${filme.poster}" alt="Pôster do filme ${filme.titulo}" width="100">
-            <h2>${filme.titulo}</h2>
-            <p>${filme.ano} - ${filme.genero}</p>
-            <p>Nota: ${estrelas(filme.nota)}</p>
-            <span class="badge ${filme.status}">${rotuloStatus(filme.status)}</span>
-            <div class="acoes">
-                <button class="editar btn-editar" type="button">Editar</button>
-                <button class="remover btn-remover" type="button">Remover</button>
-            </div>
-        </article>
-    `).join("");
+function criarCard(filme) {
+    const card = document.createElement("article");
+    card.className = "card";
+    card.dataset.id = filme.id;
+
+    const poster = document.createElement("img");
+    poster.src = filme.poster || POSTER_PADRAO;
+    poster.alt = `Pôster do filme ${filme.titulo}`;
+    poster.width = 100;
+    poster.addEventListener("error", () => {
+        poster.src = POSTER_PADRAO;
+    }, { once: true });
+
+    const titulo = document.createElement("h2");
+    titulo.textContent = filme.titulo;
+    const detalhes = document.createElement("p");
+    detalhes.textContent = `${filme.ano} - ${filme.genero}`;
+    const nota = document.createElement("p");
+    nota.textContent = `Nota: ${estrelas(filme.nota)}`;
+    const badge = document.createElement("span");
+    badge.className = `badge ${filme.status}`;
+    badge.textContent = rotuloStatus(filme.status);
+
+    const acoes = document.createElement("div");
+    acoes.className = "acoes";
+    const editar = document.createElement("button");
+    editar.className = "editar btn-editar";
+    editar.type = "button";
+    editar.textContent = "Editar";
+    editar.setAttribute("aria-label", `Editar ${filme.titulo}`);
+    const remover = document.createElement("button");
+    remover.className = "remover btn-remover";
+    remover.type = "button";
+    remover.textContent = "Remover";
+    remover.setAttribute("aria-label", `Remover ${filme.titulo}`);
+    acoes.append(editar, remover);
+    card.append(poster, titulo, detalhes, nota, badge, acoes);
+    return card;
 }
 
+function renderizarCards(filmes) {
+    const fragmento = document.createDocumentFragment();
+    filmes.forEach((filme) => fragmento.appendChild(criarCard(filme)));
+    lista.replaceChildren(fragmento);
+}
+
+function validarFilme(filme) {
+    const erros = [];
+    if (typeof filme.titulo !== "string" || !filme.titulo.trim()) erros.push("Informe o título.");
+    if (!Number.isInteger(filme.ano) || filme.ano < 1888 || filme.ano > 2030) erros.push("Informe um ano inteiro entre 1888 e 2030.");
+    if (typeof filme.genero !== "string" || !filme.genero.trim()) erros.push("Informe o gênero.");
+    if (!Number.isInteger(filme.nota) || filme.nota < 1 || filme.nota > 5) erros.push("Informe uma nota inteira entre 1 e 5.");
+    if (!["assistido", "assistindo", "quero"].includes(filme.status)) erros.push("Selecione um status válido.");
+    if (filme.poster) {
+        try {
+            const url = new URL(filme.poster);
+            if (!["http:", "https:"].includes(url.protocol)) erros.push("Use uma URL HTTP ou HTTPS para o pôster.");
+        } catch {
+            erros.push("Informe uma URL válida para o pôster ou deixe o campo vazio.");
+        }
+    }
+    return { valido: erros.length === 0, erros };
+}
+
+const gerarId = (lista) => Math.max(0, ...lista.map((filme) => filme.id)) + 1;
+
+function abrir() {
+    focoAnterior = document.activeElement;
+    rolagemAnterior = document.body.style.overflow;
+    errosFormulario.hidden = true;
+    errosFormulario.textContent = "";
+    document.querySelector("#modal-titulo").textContent = editandoId === null ? "Adicionar filme" : "Editar filme";
+    modal.hidden = false;
+    fundo.forEach((elemento) => elemento.inert = true);
+    document.body.style.overflow = "hidden";
+    form.elements.titulo.focus();
+    modal.querySelector(".modal-conteudo").scrollTop = 0;
+}
+
+function fechar() {
+    modal.hidden = true;
+    fundo.forEach((elemento) => elemento.inert = false);
+    document.body.style.overflow = rolagemAnterior;
+    const alvo = focoAnterior?.isConnected ? focoAnterior : document.querySelector("header button");
+    alvo.focus();
+}
+
+function adicionar() {
+    editandoId = null;
+    form.reset();
+    abrir();
+}
+
+document.querySelector("header button").addEventListener("click", adicionar);
+document.querySelector('footer a[href="adicionar.html"]').addEventListener("click", (evento) => {
+    evento.preventDefault();
+    adicionar();
+});
+form.querySelector('button[type="button"]').addEventListener("click", fechar);
+
+document.addEventListener("keydown", (evento) => {
+    if (modal.hidden) return;
+    if (evento.key === "Escape") fechar();
+    if (evento.key !== "Tab") return;
+    const campos = [...form.querySelectorAll("input, select, textarea, button")];
+    const primeiro = campos[0];
+    const ultimo = campos[campos.length - 1];
+    if (evento.shiftKey && document.activeElement === primeiro) {
+        evento.preventDefault();
+        ultimo.focus();
+    } else if (!evento.shiftKey && document.activeElement === ultimo) {
+        evento.preventDefault();
+        primeiro.focus();
+    }
+});
+
 lista.addEventListener("click", (evento) => {
-    const botao = evento.target.closest(".btn-remover");
+    const botao = evento.target.closest(".btn-remover, .btn-editar");
     if (!botao) return;
-    if (!confirm("Remover este filme?")) return;
     const id = Number(botao.closest(".card").dataset.id);
-    filmes = filmes.filter((filme) => filme.id !== id);
+    if (botao.classList.contains("btn-remover")) {
+        if (!confirm("Remover este filme?")) return;
+        filmes = filmes.filter((filme) => filme.id !== id);
+        const status = nav.querySelector(".ativo").dataset.status;
+        renderizarCards(filmes.filter((filme) => status === "todos" || filme.status === status));
+    } else {
+        const filme = filmes.find((filme) => filme.id === id);
+        editandoId = id;
+        for (const campo of ["titulo", "ano", "genero", "poster", "status", "nota", "comentario"]) {
+            form.elements[campo].value = filme[campo];
+        }
+        abrir();
+    }
+});
+
+form.addEventListener("submit", (evento) => {
+    evento.preventDefault();
+    const dados = Object.fromEntries(new FormData(form));
+    for (const campo of ["titulo", "genero", "poster", "comentario"]) dados[campo] = dados[campo].trim();
+    dados.ano = Number(dados.ano);
+    dados.nota = Number(dados.nota);
+    const { valido, erros } = validarFilme(dados);
+    if (!valido) {
+        errosFormulario.textContent = erros.join("\n");
+        errosFormulario.hidden = false;
+        errosFormulario.focus();
+        return;
+    }
+    if (editandoId !== null) {
+        filmes = filmes.map((filme) => filme.id === editandoId ? { ...filme, ...dados } : filme);
+    } else {
+        filmes = [...filmes, { id: gerarId(filmes), ...dados }];
+    }
     const status = nav.querySelector(".ativo").dataset.status;
     renderizarCards(filmes.filter((filme) => status === "todos" || filme.status === status));
+    fechar();
 });
 
 nav.addEventListener("click", (evento) => {
