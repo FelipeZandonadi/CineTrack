@@ -77,6 +77,8 @@ const filmesIniciais = [
 ];
 
 const lista = document.querySelector("#lista");
+const nav = document.querySelector('nav[aria-label="Filtros de status"]');
+let filmes = [...filmesIniciais];
 
 function renderizarCards(filmes) {
     lista.innerHTML = filmes.map((filme) => `
@@ -87,14 +89,33 @@ function renderizarCards(filmes) {
             <p>Nota: ${estrelas(filme.nota)}</p>
             <span class="badge ${filme.status}">${rotuloStatus(filme.status)}</span>
             <div class="acoes">
-                <button class="editar" type="button">Editar</button>
-                <button class="remover" type="button">Remover</button>
+                <button class="editar btn-editar" type="button">Editar</button>
+                <button class="remover btn-remover" type="button">Remover</button>
             </div>
         </article>
     `).join("");
 }
 
-renderizarCards(filmesIniciais);
+lista.addEventListener("click", (evento) => {
+    const botao = evento.target.closest(".btn-remover");
+    if (!botao) return;
+    if (!confirm("Remover este filme?")) return;
+    const id = Number(botao.closest(".card").dataset.id);
+    filmes = filmes.filter((filme) => filme.id !== id);
+    const status = nav.querySelector(".ativo").dataset.status;
+    renderizarCards(filmes.filter((filme) => status === "todos" || filme.status === status));
+});
+
+nav.addEventListener("click", (evento) => {
+    const botao = evento.target.closest("button");
+    if (!botao) return;
+    nav.querySelector(".ativo").classList.remove("ativo");
+    botao.classList.add("ativo");
+    const status = botao.dataset.status;
+    renderizarCards(filmes.filter((filme) => status === "todos" || filme.status === status));
+});
+
+renderizarCards(filmes);
 
 const TOTAL = 6;
 document.querySelector("footer small").textContent = `CineTrack © 2026 · ${TOTAL} filmes cadastrados`;
