@@ -25,4 +25,4 @@ O código da Parte 1 está em `parte1/`, com a lógica concentrada em `app.js`. 
 
 ## Autoria
 
-Nome(s) e RA(s): a preencher.
+Nome(s) e RA(s): Felipe Zandonadi dos Santos RA138579
