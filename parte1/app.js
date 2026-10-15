@@ -81,9 +81,15 @@ const nav = document.querySelector('nav[aria-label="Filtros de status"]');
 const modal = document.querySelector("#modal");
 const form = document.querySelector("#form-filme");
 const errosFormulario = document.querySelector("#erros-formulario");
+const busca = document.querySelector('header input[type="search"]');
+const avisoArmazenamento = document.querySelector("#aviso-armazenamento");
+const estadoVazio = document.querySelector("#estado-vazio");
 const fundo = [...document.body.children].filter((elemento) => elemento !== modal && elemento.tagName !== "SCRIPT");
 const POSTER_PADRAO = "data:image/svg+xml," + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 300"><rect width="200" height="300" fill="#202020"/><text x="100" y="150" text-anchor="middle" fill="#f5f5f5" font-family="sans-serif" font-size="16">Sem pôster</text></svg>');
-let filmes = [...filmesIniciais];
+const CHAVE = "cinetrack:filmes";
+let filmes = carregar();
+let termoAtual = "";
+let statusAtual = "todos";
 let editandoId = null;
 let focoAnterior = null;
 let rolagemAnterior = "";
@@ -132,6 +138,65 @@ function renderizarCards(filmes) {
     const fragmento = document.createDocumentFragment();
     filmes.forEach((filme) => fragmento.appendChild(criarCard(filme)));
     lista.replaceChildren(fragmento);
+}
+
+function aplicarFiltros(lista, opcoes) {
+    const termo = opcoes.termo.trim().toLowerCase();
+    return lista.filter((filme) => filme.titulo.toLowerCase().includes(termo))
+        .filter((filme) => opcoes.status === "todos" || filme.status === opcoes.status);
+}
+
+function atualizar() {
+    termoAtual = busca.value;
+    const visiveis = aplicarFiltros(filmes, { termo: termoAtual, status: statusAtual });
+    renderizarCards(visiveis);
+    estadoVazio.hidden = visiveis.length > 0;
+    estadoVazio.textContent = filmes.length === 0
+        ? "Sua lista está vazia. Adicione um filme para começar."
+        : "Nenhum filme encontrado para esta busca e status.";
+    const total = filmes.length;
+    document.querySelector("footer small").textContent = `CineTrack © 2026 · ${total} ${total === 1 ? "filme cadastrado" : "filmes cadastrados"}`;
+}
+
+function debounce(fn, ms = 300) {
+    let timer;
+    return (...args) => {
+        clearTimeout(timer);
+        timer = setTimeout(() => fn(...args), ms);
+    };
+}
+
+const aoDigitar = () => atualizar();
+busca.addEventListener("input", debounce(aoDigitar, 300));
+
+function salvar() {
+    try {
+        localStorage.setItem(CHAVE, JSON.stringify(filmes));
+        avisoArmazenamento.hidden = true;
+    } catch {
+        avisoArmazenamento.textContent = "Não foi possível salvar no navegador. As alterações estão disponíveis apenas nesta sessão.";
+        avisoArmazenamento.hidden = false;
+    }
+}
+
+function carregar() {
+    try {
+        const texto = localStorage.getItem(CHAVE);
+        if (texto === null) return [...filmesIniciais];
+        const dados = JSON.parse(texto);
+        if (!Array.isArray(dados) || !dados.every((filme) => filme
+            && Number.isInteger(filme.id) && filme.id > 0
+            && typeof filme.poster === "string" && typeof filme.comentario === "string"
+            && validarFilme(filme).valido)
+            || new Set(dados.map((filme) => filme.id)).size !== dados.length) {
+            throw new Error("Lista inválida");
+        }
+        return dados;
+    } catch {
+        avisoArmazenamento.textContent = "Não foi possível carregar os dados salvos. Exibindo os filmes de exemplo.";
+        avisoArmazenamento.hidden = false;
+        return [...filmesIniciais];
+    }
 }
 
 function validarFilme(filme) {
@@ -211,8 +276,8 @@ lista.addEventListener("click", (evento) => {
     if (botao.classList.contains("btn-remover")) {
         if (!confirm("Remover este filme?")) return;
         filmes = filmes.filter((filme) => filme.id !== id);
-        const status = nav.querySelector(".ativo").dataset.status;
-        renderizarCards(filmes.filter((filme) => status === "todos" || filme.status === status));
+        salvar();
+        atualizar();
     } else {
         const filme = filmes.find((filme) => filme.id === id);
         editandoId = id;
@@ -241,21 +306,21 @@ form.addEventListener("submit", (evento) => {
     } else {
         filmes = [...filmes, { id: gerarId(filmes), ...dados }];
     }
-    const status = nav.querySelector(".ativo").dataset.status;
-    renderizarCards(filmes.filter((filme) => status === "todos" || filme.status === status));
+    salvar();
+    atualizar();
     fechar();
 });
 
 nav.addEventListener("click", (evento) => {
     const botao = evento.target.closest("button");
     if (!botao) return;
-    nav.querySelector(".ativo").classList.remove("ativo");
-    botao.classList.add("ativo");
-    const status = botao.dataset.status;
-    renderizarCards(filmes.filter((filme) => status === "todos" || filme.status === status));
+    nav.querySelectorAll("button").forEach((filtro) => {
+        const ativo = filtro === botao;
+        filtro.classList.toggle("ativo", ativo);
+        filtro.setAttribute("aria-pressed", String(ativo));
+    });
+    statusAtual = botao.dataset.status;
+    atualizar();
 });
 
-renderizarCards(filmes);
-
-const TOTAL = 6;
-document.querySelector("footer small").textContent = `CineTrack © 2026 · ${TOTAL} filmes cadastrados`;
+atualizar();

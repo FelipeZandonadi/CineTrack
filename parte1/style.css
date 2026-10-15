@@ -255,6 +255,10 @@ footer {
     margin-bottom: var(--espaco);
 }
 
+.mensagem-lista {
+    padding: var(--espaco) var(--espaco-grande);
+}
+
 #form-filme p {
     display: flex;
     flex-direction: column;

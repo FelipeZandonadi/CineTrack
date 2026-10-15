@@ -17,13 +17,15 @@
         </button>
     </header>
     <nav aria-label="Filtros de status">
-        <button class="ativo" type="button" data-status="todos">Todos</button>
-        <button class="desativo" type="button" data-status="assistido">Assistido</button>
-        <button class="desativo" type="button" data-status="assistindo">Assistindo</button>
-        <button class="desativo" type="button" data-status="quero">Quero Assistir</button>
+        <button class="ativo" type="button" data-status="todos" aria-pressed="true">Todos</button>
+        <button class="desativo" type="button" data-status="assistido" aria-pressed="false">Assistido</button>
+        <button class="desativo" type="button" data-status="assistindo" aria-pressed="false">Assistindo</button>
+        <button class="desativo" type="button" data-status="quero" aria-pressed="false">Quero Assistir</button>
     </nav>
     <main>
-        <section id="lista" aria-live="polite"></section>
+        <p id="aviso-armazenamento" class="mensagem-lista mensagem-erro" role="status" hidden></p>
+        <section id="lista" aria-label="Lista de filmes" aria-live="polite"></section>
+        <p id="estado-vazio" class="mensagem-lista" role="status" hidden></p>
     </main>
     <div id="modal" hidden>
         <div class="modal-conteudo" role="dialog" aria-modal="true" aria-labelledby="modal-titulo">
